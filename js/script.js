@@ -31,6 +31,11 @@ function drawIt() {
     var izpisTimer;
     var start = true;
 
+    //zajkljucek igre
+    var GAMEOVER = false;
+
+    var intervalId;
+
 
 
     function init() {
@@ -118,18 +123,21 @@ function drawIt() {
         ctx.clearRect(0, 0, WIDTH, HEIGHT);
     }
     //END LIBRARY CODE
+    var brickColors = ['#e05c5c', '#e0885c', '#d4c94a', '#4abbd4', '#4a8fd4'];
+
     function draw() {
         clear();
+        ctx.fillStyle = '#f0f8ff'; // za spremenit
         circle(x, y, 10);
         //premik ploščice levo in desno
-        if (rightDown) {
+        if (rightDown && !GAMEOVER) {
             if ((paddlex + paddlew) < WIDTH) {
                 paddlex += 5;
             } else {
                 paddlex = WIDTH - paddlew;
             }
         }
-        else if (leftDown) {
+        else if (leftDown && !GAMEOVER) {
             if (paddlex > 0) {
                 paddlex -= 5;
             } else {
@@ -138,12 +146,14 @@ function drawIt() {
         }
 
 
+        ctx.fillStyle = '#3ab8d4';
         rect(paddlex, HEIGHT - paddleh, paddlew, paddleh);
 
         //riši opeke
         for (i = 0; i < NROWS; i++) {
             for (j = 0; j < NCOLS; j++) {
                 if (bricks[i][j] == 1) {
+                    ctx.fillStyle = brickColors[i % brickColors.length]; //za spremenit
                     rect((j * (BRICKWIDTH + PADDING)) + PADDING,
                         (i * (BRICKHEIGHT + PADDING)) + PADDING,
                         BRICKWIDTH, BRICKHEIGHT);
@@ -190,14 +200,16 @@ function drawIt() {
             }
 
             //ustavi interval draw
-            else if (y + dy > HEIGHT - r)
+            else if (y + dy > HEIGHT - r) {
+                GAMEOVER = true;
                 clearInterval(intervalId);
+            }
         }
         x += dx;
         y += dy;
     }
 
-    init();
+    intervalId = init();
     init_paddle();
     initbricks();
 

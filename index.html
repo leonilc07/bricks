@@ -1,15 +1,35 @@
 <html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Morje</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
 
-<head>
-
-</head>
-
-<body onload="drawIt()">
-    <canvas id="canvas" width="300" height="300"></canvas>
-    <p>Čas: <mark id="cas">00:00</mark></p>
-    <p>Točke: <mark id="tocke">0</mark></p>
-</body>
-<script src="js/jquery.js"></script>
-<script src="js/script.js"></script>
-
+  <body onload="drawIt()">
+    <div class="main">
+      <div class="naslov">
+        <h1>Morje</h1>
+      </div>
+      <div class="igra">
+        <div class="levaStran">
+          <button id="start">Začni igro</button>
+          <button id="reset">Ponastavi igro</button>
+        </div>
+        <div class="platno">
+          <canvas id="canvas" width="700" height="500"></canvas>
+        </div>
+        <div class="desnaStran">
+          <div class="rezultati">
+            <p>Čas: <mark id="cas">00:00</mark></p>
+            <p>Točke: <mark id="tocke">0</mark></p>
+          </div>
+          <div class="lestvica">
+            <!--naredi lestvico(local file)-->
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script src="js/jquery.js"></script>
+  <script src="js/script.js"></script>
 </html>
