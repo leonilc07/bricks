@@ -50,15 +50,30 @@ button:hover{
 }
 
 .naslov{
-    font-size: 24px;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
+    margin-top: 20px;
+    text-align: center;
 }
 
 .naslov h1{
-    font-size: 2.2rem;
-    letter-spacing: 0.15em;
+    font-size: 3rem;
+    letter-spacing: 0.2em;
     color: #7de8f5;
-    text-shadow: 0 0 14px #3ab8d4cc, 0 2px 4px #000a;
+    text-shadow: 0 0 20px #3ab8d4cc, 0 0 40px #0af2ff66, 0 2px 4px #000a;
+}
+
+.podnaslov{
+    font-size: 0.95rem;
+    color: #7de8f5aa;
+    letter-spacing: 0.25em;
+    margin-top: 6px;
+}
+
+.naslov-crta{
+    width: 320px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #3ab8d4, transparent);
+    margin: 14px auto 0 auto;
 }
 
 .igra{
@@ -72,6 +87,12 @@ button:hover{
     flex-direction: column;
     align-items: center;
     margin-right: 20px;
+    background: rgba(10, 40, 70, 0.6);
+    border: 1px solid #3ab8d455;
+    border-radius: 8px;
+    padding: 20px 14px;
+    align-self: stretch;
+    justify-content: center;
 }
 
 .desnaStran{
@@ -79,10 +100,33 @@ button:hover{
     flex-direction: column;
     align-items: center;
     margin-left: 20px;
+    background: rgba(10, 40, 70, 0.6);
+    border: 1px solid #3ab8d455;
+    border-radius: 8px;
+    padding: 20px 14px;
+    align-self: stretch;
+    justify-content: center;
+}
+
+.panel-naslov{
+    font-size: 13px;
+    letter-spacing: 0.15em;
+    color: #7de8f5;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+}
+
+.panel-crta{
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #3ab8d4aa, transparent);
+    margin: 6px 0 12px 0;
 }
 
 .rezultati{
     margin-bottom: 20px;
+    width: 100%;
+    text-align: center;
 }
 
 .rezultati p{
@@ -99,7 +143,39 @@ button:hover{
 }
 
 .lestvica{
-    
+    text-align: center;
+    width: 100%;
 }
+
+.lestvica p{
+    font-size: 16px;
+    color: #7de8f5;
+    letter-spacing: 0.08em;
+    margin-bottom: 6px;
+}
+
+.lestvica ol{
+    padding-left: 20px;
+    text-align: left;
+}
+
+.lestvica li{
+    font-size: 14px;
+    color: #cce9f5;
+    margin: 4px 0;
+    letter-spacing: 0.03em;
+    padding: 3px 6px;
+    border-radius: 4px;
+    background: rgba(58, 184, 212, 0.07);
+}
+
+.platno{
+    line-height: 0;
+}
+
+.levaStran button{
+    width: 140px;
+}
+
 
 
