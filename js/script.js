@@ -1,6 +1,6 @@
 // skrinjica — cilj igre
 var chest = new Image();
-chest.src = '../img/chest.png';
+chest.src = 'img/chest.png';
 
 function drawIt() {
     var x = 350;
