@@ -1,6 +1,6 @@
 // skrinjica — cilj igre
 var chest = new Image();
-chest.src = 'img/chest.png';
+chest.src = '../img/chest.png';
 
 function drawIt() {
     var x = 350;
@@ -97,19 +97,19 @@ function drawIt() {
             for (j = 0; j < NCOLS; j++) {
                 switch (i) {
                     case 0:
-                        bricks[i][j] = 5;
+                        bricks[i][j] = 1;
                         break;
                     case 1:
-                        bricks[i][j] = 4;
+                        bricks[i][j] = 0;
                         break;
                     case 2:
-                        bricks[i][j] = 3;
+                        bricks[i][j] = 0;
                         break;
                     case 3:
-                        bricks[i][j] = 2;
+                        bricks[i][j] = 0;
                         break;
                     case 4:
-                        bricks[i][j] = 1;
+                        bricks[i][j] = 0;
                         break;
                 }
             }
@@ -118,7 +118,7 @@ function drawIt() {
 
 
     function initchest() {
-        chestW = BRICKWIDTH;
+        chestW = 60;
         chestH = BRICKHEIGHT;
         chestX = Math.floor(Math.random() * (WIDTH - chestW));
         chestY = PADDING;
@@ -132,6 +132,14 @@ function drawIt() {
     }
 
     function rect(x, y, w, h) {
+        ctx.shadowBlur = 5;
+        ctx.shadowOffsetX = 2;
+        ctx.shadowOffsetY = 2;
+
+        ctx.shadowBlur = 5;
+        ctx.shadowOffsetX = -2;
+        ctx.shadowOffsetY = -2;
+
         ctx.beginPath();
         ctx.rect(x, y, w, h);
         ctx.closePath();
@@ -142,7 +150,7 @@ function drawIt() {
         ctx.clearRect(0, 0, WIDTH, HEIGHT);
     }
     //END LIBRARY CODE
-    var brickColors = ['#58c1ee', '#26c0e3', '#249ce1', '#2865f3', '#050596'];
+    var brickColors = ['#0a7a8a', '#0c647b', '#0d4f6e', '#0c3c5c', '#0b2e4a'];
 
     function draw() {
         if (vPavzi) return; // igra je na pavzi
@@ -185,6 +193,7 @@ function drawIt() {
         for (i = 0; i < NROWS; i++) {
             for (j = 0; j < NCOLS; j++) {
                 if (bricks[i][j] > 0) {
+                    ctx.shadowColor = brickColors[bricks[i][j] - 1];
                     ctx.fillStyle = brickColors[bricks[i][j] - 1];
                     rect((j * (BRICKWIDTH + PADDING)) + PADDING,
                         (i * (BRICKHEIGHT + PADDING)) + PADDING,
@@ -300,7 +309,7 @@ function predogled() {
     var BRICKWIDTH = (W / NCOLS) - 1;
     var BRICKHEIGHT = 30;
     var PADDING = 1;
-    var brickColors = ['#58c1ee', '#26c0e3', '#249ce1', '#2865f3', '#050596'];
+    var brickColors = ['#0a7a8a', '#0c647b', '#0d4f6e', '#0c3c5c', '#0b2e4a'];
 
     pctx.clearRect(0, 0, W, H);
 
@@ -315,6 +324,7 @@ function predogled() {
     // opeke
     for (var i = 0; i < NROWS; i++) {
         for (var j = 0; j < NCOLS; j++) {
+            ctx.shadowColor = brickColors[NROWS - i - 1];
             pctx.fillStyle = brickColors[NROWS - i - 1];
             pctx.fillRect(
                 (j * (BRICKWIDTH + PADDING)) + PADDING,

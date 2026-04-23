@@ -1,5 +1,4 @@
-// Prikaže sweet alert ob koncu igre (game over).
-// Pokliče se iz script.js ko žogica pade na tla.
+//ko pirde do tli
 function gameOverAlert(tocke, cas) {
     Swal.fire({
         title: 'Konec igre!',
@@ -14,7 +13,7 @@ function gameOverAlert(tocke, cas) {
     });
 }
 
-// Prikaže sweet alert ko igralec uniči vse brike in pride do skrinjice.
+// ko pobere skrinjo
 function winAlert(tocke, cas) {
     Swal.fire({
         title: 'Našel si skrinjico!',
