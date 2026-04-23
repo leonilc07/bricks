@@ -1,6 +1,8 @@
-// skrinjica — cilj igre
-var chest = new Image();
-chest.src = '../img/chest.png';
+var STCEKINOV = 7;
+
+// cekin slika
+var cekin = new Image();
+cekin.src = '../img/dollar.gif';
 
 function drawIt() {
     var x = 350;
@@ -36,10 +38,11 @@ function drawIt() {
 
     //zajkljucek igre
     var GAMEOVER = false;
-    var chestX, chestY, chestW, chestH;
+    var cekini = [];
 
     function init() {
         tocke = 0;
+        zbrani = 0;
         $("#tocke").html(tocke);
         sekunde = 0;
         izpisTimer = "00:00";
@@ -88,28 +91,28 @@ function drawIt() {
     function initbricks() { //inicializacija opek - polnjenje v tabelo
         NROWS = 5;
         NCOLS = 6;
-        BRICKWIDTH = (WIDTH / NCOLS) - 1;
-        BRICKHEIGHT = 30;
-        PADDING = 1;
+        BRICKWIDTH = (WIDTH / NCOLS) - 5;
+        BRICKHEIGHT = 22;
+        PADDING = 5;
         bricks = new Array(NROWS);
         for (i = 0; i < NROWS; i++) {
             bricks[i] = new Array(NCOLS);
             for (j = 0; j < NCOLS; j++) {
                 switch (i) {
                     case 0:
-                        bricks[i][j] = 1;
+                        bricks[i][j] = 5;
                         break;
                     case 1:
-                        bricks[i][j] = 0;
+                        bricks[i][j] = 4;
                         break;
                     case 2:
-                        bricks[i][j] = 0;
+                        bricks[i][j] = 3;
                         break;
                     case 3:
-                        bricks[i][j] = 0;
+                        bricks[i][j] = 2;
                         break;
                     case 4:
-                        bricks[i][j] = 0;
+                        bricks[i][j] = 1;
                         break;
                 }
             }
@@ -117,11 +120,20 @@ function drawIt() {
     }
 
 
-    function initchest() {
-        chestW = 60;
-        chestH = BRICKHEIGHT;
-        chestX = Math.floor(Math.random() * (WIDTH - chestW));
-        chestY = PADDING;
+    function initCekini() {
+        cekini = [];
+        var cekinW = 30;
+        var cekinH = 30;
+        var margin = 20;
+        for (var i = 0; i < STCEKINOV; i++) {
+            cekini.push({
+                x: margin + Math.random() * (WIDTH - 2 * margin - cekinW),
+                y: PADDING + Math.random() * (NROWS * (BRICKHEIGHT + PADDING) - cekinH),
+                w: cekinW,
+                h: cekinH,
+                aktiven: true
+            });
+        }
     }
 
     function circle(x, y, r) {
@@ -135,11 +147,13 @@ function drawIt() {
         ctx.shadowBlur = 5;
         ctx.shadowOffsetX = 2;
         ctx.shadowOffsetY = 2;
+        ctx.beginPath();
+        ctx.rect(x, y, w, h);
+        ctx.closePath();
+        ctx.fill();
 
-        ctx.shadowBlur = 5;
         ctx.shadowOffsetX = -2;
         ctx.shadowOffsetY = -2;
-
         ctx.beginPath();
         ctx.rect(x, y, w, h);
         ctx.closePath();
@@ -184,9 +198,13 @@ function drawIt() {
         ctx.fillStyle = '#3ab8d4';
         rect(paddlex, HEIGHT - paddleh, paddlew, paddleh);
 
-        //narisi skrinjo pred briki da je pod njimi
-        if (chest.complete) {
-            ctx.drawImage(chest, chestX, chestY, chestW, chestH);
+        // riši cekine (pred opekami, da jih opeke prekrijejo)
+        for (var ci = 0; ci < cekini.length; ci++) {
+            var c = cekini[ci];
+            if (!c.aktiven) continue;
+            if (cekin.complete) {
+                ctx.drawImage(cekin, c.x, c.y, c.w, c.h);
+            }
         }
 
         //riši opeke
@@ -201,7 +219,6 @@ function drawIt() {
                 }
             }
         }
-
 
         var hitBrick = false;
         for (var bi = 0; bi < NROWS && !hitBrick; bi++) {
@@ -241,15 +258,23 @@ function drawIt() {
             }
         }
 
-        // preveri trčenje žogice s skrinjico
-        if (x + r > chestX && x - r < chestX + chestW &&
-            y + r > chestY && y - r < chestY + chestH) {
-            GAMEOVER = true;
-            clearInterval(intervalId);
-            clearInterval(intTimer);
-            dodajRezultat(tocke, izpisTimer);
-            prikaziLestvico();
-            winAlert(tocke, izpisTimer);
+        // preveri trčenje žogice s cekini
+        for (var ci = 0; ci < cekini.length; ci++) {
+            var c = cekini[ci];
+            if (!c.aktiven) continue;
+            if (x + r > c.x && x - r < c.x + c.w &&
+                y + r > c.y && y - r < c.y + c.h) {
+                c.aktiven = false;
+                zbrani++;
+                if (zbrani === STCEKINOV) {
+                    GAMEOVER = true;
+                    clearInterval(intervalId);
+                    clearInterval(intTimer);
+                    dodajRezultat(tocke, izpisTimer);
+                    prikaziLestvico();
+                    winAlert(tocke, izpisTimer);
+                }
+            }
         }
 
         //odboj od leve in desne stene
@@ -288,7 +313,7 @@ function drawIt() {
     intervalId = init();
     initbricks();
     init_paddle();
-    initchest()
+    initCekini();
 
 
 }
@@ -296,6 +321,7 @@ function drawIt() {
 var intervalId = null;
 var intTimer = null;
 var vPavzi = false;
+var zbrani = 0;
 
 
 
@@ -306,31 +332,29 @@ function predogled() {
     var W = $("#canvas").width();
     var H = $("#canvas").height();
     var NROWS = 5, NCOLS = 6;
-    var BRICKWIDTH = (W / NCOLS) - 1;
-    var BRICKHEIGHT = 30;
-    var PADDING = 1;
+    var BRICKWIDTH = (W / NCOLS) - 5;
+    var BRICKHEIGHT = 22;
+    var PADDING = 5;
     var brickColors = ['#0a7a8a', '#0c647b', '#0d4f6e', '#0c3c5c', '#0b2e4a'];
 
     pctx.clearRect(0, 0, W, H);
 
-    // skrinjica (cilj) — pod briki
-    var chestW = BRICKWIDTH;
-    var chestH = BRICKHEIGHT;
-    var chestX = Math.floor(Math.random() * (W - chestW));
-    if (chest.complete) {
-        pctx.drawImage(chest, chestX, PADDING, chestW, chestH);
-    }
-
-    // opeke
+    // opeke - nariši dvakrat za senco na obeh straneh
     for (var i = 0; i < NROWS; i++) {
         for (var j = 0; j < NCOLS; j++) {
-            ctx.shadowColor = brickColors[NROWS - i - 1];
+            var bx = (j * (BRICKWIDTH + PADDING)) + PADDING;
+            var by = (i * (BRICKHEIGHT + PADDING)) + PADDING;
             pctx.fillStyle = brickColors[NROWS - i - 1];
-            pctx.fillRect(
-                (j * (BRICKWIDTH + PADDING)) + PADDING,
-                (i * (BRICKHEIGHT + PADDING)) + PADDING,
-                BRICKWIDTH, BRICKHEIGHT
-            );
+            pctx.shadowColor = brickColors[NROWS - i - 1];
+
+            pctx.shadowBlur = 5;
+            pctx.shadowOffsetX = 2;
+            pctx.shadowOffsetY = 2;
+            pctx.fillRect(bx, by, BRICKWIDTH, BRICKHEIGHT);
+
+            pctx.shadowOffsetX = -2;
+            pctx.shadowOffsetY = -2;
+            pctx.fillRect(bx, by, BRICKWIDTH, BRICKHEIGHT);
         }
     }
 
@@ -375,6 +399,7 @@ $("#start").on("click", function () {
 $("#reset").on("click", function () {
     clearInterval(intervalId);
     clearInterval(intTimer);
+    zbrani = 0;
     predogled();
     prikaziLestvico();
 });

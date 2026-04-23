@@ -5,7 +5,7 @@ function gameOverAlert(tocke, cas) {
         html: 'Točke: <strong>' + tocke + '</strong><br>Čas: <strong>' + cas + '</strong>',
         icon: 'error',
         confirmButtonText: 'Poskusi znova',
-        confirmButtonColor: '#3ab8d4'
+        confirmButtonColor: '#0d4f6e'
     }).then(function () {
         clearInterval(intervalId);
         clearInterval(intTimer);
@@ -20,7 +20,7 @@ function winAlert(tocke, cas) {
         html: '<br>Točke: <strong>' + tocke + '</strong><br>Čas: <strong>' + cas + '</strong>',
         icon: 'success',
         confirmButtonText: '🏆 Igraj znova',
-        confirmButtonColor: '#3ab8d4'
+        confirmButtonColor: '#0d4f6e'
     }).then(function () {
         clearInterval(intervalId);
         clearInterval(intTimer);

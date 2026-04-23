@@ -1,0 +1,17 @@
+99  switch (i) {
+                    case 0:
+                        bricks[i][j] = 1;
+                        break;
+                    case 1:
+                        bricks[i][j] = 0;
+                        break;
+                    case 2:
+                        bricks[i][j] = 0;
+                        break;
+                    case 3:
+                        bricks[i][j] = 0;
+                        break;
+                    case 4:
+                        bricks[i][j] = 0;
+                        break;
+                }
