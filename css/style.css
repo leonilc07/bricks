@@ -175,6 +175,14 @@ button:hover {
     text-align: center;
 }
 
+h3 {
+    color: rgb(120, 189, 247);
+}
+
+#premik {
+    margin-bottom: 20px;
+}
+
 .platno {
     line-height: 0;
 }
