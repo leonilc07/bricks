@@ -3,12 +3,14 @@ var STCEKINOV = 7;
 // cekin slika
 var cekin = new Image();
 cekin.src = '../img/dollar.gif';
+    var indexy = 0;
 
 function drawIt() {
+    igraTece = true;
     var x = 350;
     var y = 250;
     var dx = 2;
-    var dy = 4;
+    var dy = [4, 6, 10];
     var WIDTH;
     var HEIGHT;
     var r = 10;
@@ -160,6 +162,22 @@ function drawIt() {
         ctx.fill();
     }
 
+    function setIndex(x) {
+        indexy = x;
+    }
+
+    $("#level1").off("click").on("click", function () {
+        if (!igraTece) setIndex(0);
+    });
+
+    $("#level2").off("click").on("click", function () {
+        if (!igraTece) setIndex(1);
+    });
+
+    $("#level3").off("click").on("click", function () {
+        if (!igraTece) setIndex(2);
+    });
+
     function clear() {
         ctx.clearRect(0, 0, WIDTH, HEIGHT);
     }
@@ -243,11 +261,11 @@ function drawIt() {
                         x = bRight + r;
                     }
                     else if (minOv === ovTop) {
-                        dy = -Math.abs(dy);
+                        dy[indexy] = -Math.abs(dy[indexy]);
                         y = bTop - r;
                     }
                     else {
-                        dy = Math.abs(dy);
+                        dy[indexy] = Math.abs(dy[indexy]);
                         y = bBottom + r;
                     }
                     bricks[bi][bj]--;
@@ -268,6 +286,7 @@ function drawIt() {
                 zbrani++;
                 if (zbrani === STCEKINOV) {
                     GAMEOVER = true;
+                    igraTece = false;
                     clearInterval(intervalId);
                     clearInterval(intTimer);
                     dodajRezultat(tocke, izpisTimer);
@@ -282,22 +301,23 @@ function drawIt() {
             dx = -dx;//ce bi zogca zadela steno ji obrni x smer
 
         //odboj od zgornje stene
-        if (y + dy < 0 + r)
-            dy = -dy;//ce bi zogca zadela steno ji obrni y smer
+        if (y + dy[indexy] < 0 + r)
+            dy[indexy] = -dy[indexy];//ce bi zogca zadela steno ji obrni y smer
 
         //odboj od spodnje stene
-        else if (y + dy > HEIGHT - (r + paddleh)) {
+        else if (y + dy[indexy] > HEIGHT - (r + paddleh)) {
             start = false;
             //preveri ali je zadel ploščico
             if (x > paddlex && x < paddlex + paddlew) {
                 dx = 8 * ((x - (paddlex + paddlew / 2)) / paddlew);//ce bolj na sredino ploščice zadene, manjši odboj, če bolj na rob, večji odboj
-                dy = -dy; //obbrni y smer
+                dy[indexy] = -dy[indexy]; //obbrni y smer
                 start = true;
             }
 
             //ustavi interval draw
-            else if (y + dy > HEIGHT - r) {
+            else if (y + dy[indexy] > HEIGHT - r) {
                 GAMEOVER = true;
+                igraTece = false;
                 clearInterval(intervalId);
                 clearInterval(intTimer);
                 dodajRezultat(tocke, izpisTimer);
@@ -306,7 +326,7 @@ function drawIt() {
             }
         }
         x += dx;
-        y += dy;
+        y += dy[indexy];
     }
 
 
@@ -322,6 +342,7 @@ var intervalId = null;
 var intTimer = null;
 var vPavzi = false;
 var zbrani = 0;
+var igraTece = false;
 
 
 
@@ -383,15 +404,17 @@ $(document).ready(function () {
 });
 
 $("#pavza").on("click", function () {
-    if (!intervalId) return; // igra ne teče
     vPavzi = !vPavzi;
     $(this).text(vPavzi ? 'Nadaljuj' : 'Pavza');
 });
+
+
 
 $("#start").on("click", function () {
     clearInterval(intervalId);
     clearInterval(intTimer);
     vPavzi = false;
+    igraTece = true;
     $("#pavza").text('Pavza');
     drawIt();
 });
@@ -400,6 +423,7 @@ $("#reset").on("click", function () {
     clearInterval(intervalId);
     clearInterval(intTimer);
     zbrani = 0;
+    igraTece = false;
     predogled();
     prikaziLestvico();
 });
