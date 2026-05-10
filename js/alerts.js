@@ -25,7 +25,7 @@ function winAlert(tocke, cas) {
         iconColor: '#3ab8d4',
         background: '#0b2e4a',
         color: '#cce9f5',
-        confirmButtonText: '🏆 Igraj znova',
+        confirmButtonText: 'Igraj znova',
         confirmButtonColor: '#0a7a8a'
     }).then(function () {
         dodajRezultat(tocke, cas, imeIgralca);

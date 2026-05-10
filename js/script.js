@@ -46,6 +46,7 @@ function drawIt() {
         tocke = 0;
         zbrani = 0;
         $("#tocke").html(tocke);
+        $("#cekini-zbrani").html("0/" + STCEKINOV);
         sekunde = 0;
         izpisTimer = "00:00";
         intTimer = setInterval(timer, 1000); // shrani v globalno spremenljivko
@@ -269,7 +270,7 @@ function drawIt() {
                         y = bBottom + r;
                     }
                     bricks[bi][bj]--;
-                    tocke += 1;
+                    tocke += bricks[bi][bj] % (indexy + 1) + 1; // več točk za višje nivoje in trše opeke
                     $("#tocke").html(tocke);
                     hitBrick = true;
                 }
@@ -284,13 +285,12 @@ function drawIt() {
                 y + r > c.y && y - r < c.y + c.h) {
                 c.aktiven = false;
                 zbrani++;
+                $("#cekini-zbrani").html(zbrani + "/" + STCEKINOV);
                 if (zbrani === STCEKINOV) {
                     GAMEOVER = true;
                     igraTece = false;
                     clearInterval(intervalId);
                     clearInterval(intTimer);
-                    dodajRezultat(tocke, izpisTimer);
-                    prikaziLestvico();
                     winAlert(tocke, izpisTimer);
                 }
             }
@@ -320,8 +320,6 @@ function drawIt() {
                 igraTece = false;
                 clearInterval(intervalId);
                 clearInterval(intTimer);
-                dodajRezultat(tocke, izpisTimer);
-                prikaziLestvico();
                 gameOverAlert(tocke, izpisTimer);
             }
         }
@@ -343,6 +341,7 @@ var intTimer = null;
 var vPavzi = false;
 var zbrani = 0;
 var igraTece = false;
+var imeIgralca = 'Steve';
 
 
 
@@ -359,6 +358,14 @@ function predogled() {
     var brickColors = ['#0a7a8a', '#0c647b', '#0d4f6e', '#0c3c5c', '#0b2e4a'];
 
     pctx.clearRect(0, 0, W, H);
+
+    // cekini
+    var cekinW = 30, cekinH = 30, margin = 20;
+    for (var i = 0; i < STCEKINOV; i++) {
+        var cx = margin + Math.random() * (W - 2 * margin - cekinW);
+        var cy = PADDING + Math.random() * (NROWS * (BRICKHEIGHT + PADDING) - cekinH);
+        pctx.drawImage(cekin, cx, cy, cekinW, cekinH);
+    }
 
     // opeke - nariši dvakrat za senco na obeh straneh
     for (var i = 0; i < NROWS; i++) {
@@ -378,6 +385,8 @@ function predogled() {
             pctx.fillRect(bx, by, BRICKWIDTH, BRICKHEIGHT);
         }
     }
+
+
 
     // ploščica
     var paddlew = 100, paddleh = 10;
@@ -399,8 +408,27 @@ function predogled() {
 }
 
 $(document).ready(function () {
-    predogled();
     prikaziLestvico();
+    Swal.fire({
+        title: '<span style="color:#7de8f5"></span>',
+        html: 'Vpiši svoje ime preden začneš igrati.',
+        input: 'text',
+        inputLabel: 'Ime',
+        inputValue: 'Steve',
+        inputAttributes: { maxlength: 16 },
+        background: '#0b2e4a',
+        color: '#cce9f5',
+        confirmButtonText: 'Začni',
+        confirmButtonColor: '#0a7a8a',
+        allowOutsideClick: false
+    }).then(function (result) {
+        imeIgralca = result.value || 'Steve';
+        if (cekin.complete) {
+            predogled();
+        } else {
+            cekin.onload = predogled;
+        }
+    });
 });
 
 $("#pavza").on("click", function () {
@@ -423,6 +451,7 @@ $("#reset").on("click", function () {
     clearInterval(intervalId);
     clearInterval(intTimer);
     zbrani = 0;
+    $("#cekini-zbrani").html("0/" + STCEKINOV);
     igraTece = false;
     predogled();
     prikaziLestvico();
@@ -446,11 +475,11 @@ function saveLeaderboardTimes(times) {
 }
 
 
-function dodajRezultat(tocke, cas) {
+function dodajRezultat(tocke, cas, ime) {
     var rezultati = loadLeaderboardTimes();
 
     // Dodaj rezultat
-    rezultati.push({ tocke: tocke, cas: cas });
+    rezultati.push({ ime: ime || "Steve", tocke: tocke, cas: cas });
 
     // Urejanje z izbiranjem
     for (var i = 0; i < rezultati.length; i++) {
@@ -490,7 +519,7 @@ function prikaziLestvico() {
 
     for (var i = 0; i < rezultati.length; i++) {
         seznam.append(
-            '<li>' + rezultati[i].tocke + ' točk &mdash; ' + rezultati[i].cas + '</li>'
+            '<li><strong>' + (rezultati[i].ime || "?") + '</strong> &mdash; ' + rezultati[i].tocke + ' točk &mdash; ' + rezultati[i].cas + '</li>'
         );
     }
 }
