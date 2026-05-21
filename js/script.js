@@ -2,7 +2,7 @@ var STCEKINOV = 7;
 
 // cekin slika
 var cekin = new Image();
-cekin.src = '../img/dollar.gif';
+cekin.src = 'img/dollar.gif';
     var indexy = 0;
 
 function drawIt() {
@@ -221,7 +221,7 @@ function drawIt() {
         for (var ci = 0; ci < cekini.length; ci++) {
             var c = cekini[ci];
             if (!c.aktiven) continue;
-            if (cekin.complete) {
+            if (cekin.complete && cekin.naturalWidth > 0) {
                 ctx.drawImage(cekin, c.x, c.y, c.w, c.h);
             }
         }
